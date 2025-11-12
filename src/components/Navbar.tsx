@@ -2,8 +2,18 @@ import React from "react";
 import Link from "next/link";
 import MobileNavbar from "./MobileNavbar";
 import DesktopNavbar from "./DesktopNavbar";
+import { currentUser } from "@clerk/nextjs/server";
+import { syncUser } from "@/actions/user.actions";
+async function Navbar() {
 
-function Navbar() {
+  const user = await currentUser();
+  if (user) {
+    try {
+      await syncUser();
+    } catch (error) {
+      console.error("Error syncing user in Navbar:", error);
+    }
+  }
   return (
     <nav
       className="sticky top-0 w-full border-b bg-background/95 backdrop-blur 
